@@ -1,0 +1,46 @@
+version: '3.0'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/conf.d/realip.conf:/etc/nginx/conf.d/realip.conf:ro"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/vhost.d:/etc/nginx/vhost.d"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/ssl/certificates:/etc/nginx/certs:ro"
+      - "nginx-html:/usr/share/nginx/html"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+    networks:
+      nginx-proxy:
+        ipv4_address: 172.30.20.10
+
+  nginx-letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    depends_on:
+      - nginx-proxy
+    restart: unless-stopped
+    volumes:
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/vhost.d:/etc/nginx/vhost.d"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/ssl/certificates:/etc/nginx/certs"
+      - "nginx-html:/usr/share/nginx/html"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - nginx-proxy
+
+networks:
+  default:
+    driver: bridge
+  nginx-proxy:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.20.0/24
+
+volumes:
+  nginx-html:
+    driver: local

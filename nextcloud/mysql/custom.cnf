@@ -1,0 +1,10 @@
+[client]
+default-character-set=utf8
+
+[mysql]
+default-character-set=utf8
+
+[mysqld]
+skip-log-bin
+binlog-format=ROW
+transaction-isolation=READ-COMMITTED
