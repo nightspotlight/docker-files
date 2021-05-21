@@ -41,7 +41,6 @@ services:
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/config:/var/www/html/config"
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/data:/var/www/html/data"
       - "nextcloud-html:/var/www/html"
-      - "nextcloud-log:/var/log/nextcloud.log"
     networks:
       - nginx-proxy
       - nextcloud
@@ -54,7 +53,6 @@ services:
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/config:/var/www/html/config"
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/data:/var/www/html/data"
       - "nextcloud-html:/var/www/html"
-      - "nextcloud-log:/var/log/nextcloud.log"
     entrypoint: /cron.sh
     depends_on:
       - nc-database
@@ -68,6 +66,4 @@ networks:
 
 volumes:
   nextcloud-html:
-    driver: local
-  nextcloud-log:
     driver: local
