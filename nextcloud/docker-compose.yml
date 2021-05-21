@@ -9,8 +9,8 @@ services:
       - ../nextcloud/database.env
     restart: unless-stopped
     volumes:
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/mysql/data:/var/lib/mysql"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf:ro"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/mysql/data:/var/lib/mysql"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf:ro"
     networks:
       - nextcloud
 
@@ -21,7 +21,7 @@ services:
       - nextcloud
 
   nc:
-    image: nextcloud:16.0
+    image: nextcloud:19.0
     depends_on:
       - nginx-letsencrypt
       - nginx-proxy
@@ -30,29 +30,31 @@ services:
     environment:
       - "MYSQL_HOST=nc-database"
       - "REDIS_HOST=nc-redis"
-      - "VIRTUAL_HOST=cloud.nightspotlight.me"
+      - "VIRTUAL_HOST=share.nightspotlight.me"
       - "LETSENCRYPT_EMAIL=nightspotlight@gmail.com"
-      - "LETSENCRYPT_HOST=cloud.nightspotlight.me"
+      - "LETSENCRYPT_HOST=share.nightspotlight.me"
     env_file:
       - ../nextcloud/database.env
     restart: unless-stopped
     volumes:
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/nextcloud-server/custom_apps:/var/www/html/custom_apps"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/nextcloud-server/config:/var/www/html/config"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/nextcloud-server/data:/var/www/html/data"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/custom_apps:/var/www/html/custom_apps"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/config:/var/www/html/config"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/data:/var/www/html/data"
       - "nextcloud-html:/var/www/html"
+      - "nextcloud-log:/var/log/nextcloud.log"
     networks:
       - nginx-proxy
       - nextcloud
 
   nc-cron:
-    image: nextcloud:16.0
+    image: nextcloud:19.0
     restart: unless-stopped
     volumes:
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/nextcloud-server/custom_apps:/var/www/html/custom_apps"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/nextcloud-server/config:/var/www/html/config"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/nextcloud-server/data:/var/www/html/data"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/custom_apps:/var/www/html/custom_apps"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/config:/var/www/html/config"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/data:/var/www/html/data"
       - "nextcloud-html:/var/www/html"
+      - "nextcloud-log:/var/log/nextcloud.log"
     entrypoint: /cron.sh
     depends_on:
       - nc-database
@@ -66,4 +68,6 @@ networks:
 
 volumes:
   nextcloud-html:
+    driver: local
+  nextcloud-log:
     driver: local
