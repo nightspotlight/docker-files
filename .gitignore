@@ -1,5 +1,8 @@
-# Created by https://www.gitignore.io/api/git,linux,macos,windows
-# Edit at https://www.gitignore.io/?templates=git,linux,macos,windows
+# Created by https://www.toptal.com/developers/gitignore/api/git,linux,macos,windows,dotenv
+# Edit at https://www.toptal.com/developers/gitignore?templates=git,linux,macos,windows,dotenv
+
+### dotenv ###
+.env
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
@@ -39,6 +42,7 @@
 
 # Icon must end with two \r
 Icon
+
 
 # Thumbnails
 ._*
@@ -85,4 +89,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.gitignore.io/api/git,linux,macos,windows
+# End of https://www.toptal.com/developers/gitignore/api/git,linux,macos,windows,dotenv
