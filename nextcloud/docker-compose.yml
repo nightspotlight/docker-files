@@ -33,7 +33,6 @@ services:
       - "VIRTUAL_HOST=share.nightspotlight.me"
       - "LETSENCRYPT_EMAIL=nightspotlight@gmail.com"
       - "LETSENCRYPT_HOST=share.nightspotlight.me"
-      - "NETWORK_ACCESS=internal"
     env_file:
       - ../nextcloud/database.env
     restart: unless-stopped
