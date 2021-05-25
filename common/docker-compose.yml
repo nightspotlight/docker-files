@@ -10,6 +10,7 @@ services:
       - "443:443"
     restart: unless-stopped
     volumes:
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/conf.d/realip.conf:/etc/nginx/conf.d/realip.conf:ro"
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/conf.d/uploadsize.conf:/etc/nginx/conf.d/uploadsize.conf:ro"
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/vhost.d:/etc/nginx/vhost.d"
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/ssl/certificates:/etc/nginx/certs:ro"
