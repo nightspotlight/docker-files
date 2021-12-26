@@ -2,7 +2,7 @@ version: '3.0'
 
 services:
   nc-database:
-    image: mariadb:10.3
+    image: mariadb:10.6
     environment:
       - "MYSQL_ROOT_PASSWORD"
     env_file:
@@ -15,13 +15,13 @@ services:
       - nextcloud
 
   nc-redis:
-    image: redis:5.0-alpine
+    image: redis:6.2-alpine
     restart: unless-stopped
     networks:
       - nextcloud
 
   nc:
-    image: nextcloud:20.0
+    image: nextcloud:23.0
     depends_on:
       - nginx-letsencrypt
       - nginx-proxy
@@ -46,7 +46,7 @@ services:
       - nextcloud
 
   nc-cron:
-    image: nextcloud:20.0
+    image: nextcloud:23.0
     restart: unless-stopped
     volumes:
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/custom_apps:/var/www/html/custom_apps"
