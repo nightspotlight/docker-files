@@ -21,7 +21,7 @@ services:
       - nextcloud
 
   nc:
-    image: nextcloud:23.0
+    image: nextcloud:24.0
     depends_on:
       - nginx-letsencrypt
       - nginx-proxy
@@ -46,7 +46,7 @@ services:
       - nextcloud
 
   nc-cron:
-    image: nextcloud:23.0
+    image: nextcloud:24.0
     restart: unless-stopped
     volumes:
       - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/custom_apps:/var/www/html/custom_apps"
