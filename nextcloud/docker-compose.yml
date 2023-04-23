@@ -2,9 +2,10 @@ version: '3.0'
 
 services:
   nc-database:
-    image: mariadb:10.6
+    image: mariadb:10.11
     environment:
       - "MYSQL_ROOT_PASSWORD"
+      - "MARIADB_AUTO_UPGRADE=yes"
     env_file:
       - ../nextcloud/database.env
     restart: unless-stopped
