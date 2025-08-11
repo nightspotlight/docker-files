@@ -1,6 +1,8 @@
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy:alpine
+    security_opt:
+      - label:disable # required for access to Podman socket
     labels:
       - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
     ports:
@@ -8,10 +10,10 @@ services:
       - "443:443"
     restart: unless-stopped
     volumes:
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/conf.d/realip.conf:/etc/nginx/conf.d/realip.conf:ro"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/conf.d/uploadsize.conf:/etc/nginx/conf.d/uploadsize.conf:ro"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/vhost.d:/etc/nginx/vhost.d"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/ssl/certificates:/etc/nginx/certs:ro"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/conf.d/realip.conf:/etc/nginx/conf.d/realip.conf:ro,z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/conf.d/uploadsize.conf:/etc/nginx/conf.d/uploadsize.conf:ro,z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/vhost.d:/etc/nginx/vhost.d:z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/ssl/certificates:/etc/nginx/certs:ro,z"
       - "nginx-html:/usr/share/nginx/html"
       - "${XDG_RUNTIME_DIR:-/run/user/1000}/podman/podman.sock:/tmp/docker.sock:ro,z"
     networks:
@@ -19,12 +21,14 @@ services:
 
   nginx-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
+    security_opt:
+      - label:disable # required for access to Podman socket
     depends_on:
       - nginx-proxy
     restart: unless-stopped
     volumes:
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/vhost.d:/etc/nginx/vhost.d"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/ssl/certificates:/etc/nginx/certs"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/vhost.d:/etc/nginx/vhost.d:z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nginx/ssl/certificates:/etc/nginx/certs:z"
       - "nginx-html:/usr/share/nginx/html"
       - "${XDG_RUNTIME_DIR:-/run/user/1000}/podman/podman.sock:/var/run/docker.sock:ro,z"
     networks:

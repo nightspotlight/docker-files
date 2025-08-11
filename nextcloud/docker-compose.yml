@@ -8,8 +8,8 @@ services:
       - ../nextcloud/database.env
     restart: unless-stopped
     volumes:
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/mysql/data:/var/lib/mysql"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf:ro"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/mysql/data:/var/lib/mysql:z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/mysql/custom.cnf:/etc/mysql/conf.d/custom.cnf:ro,z"
     networks:
       - nextcloud
 
@@ -36,9 +36,9 @@ services:
       - ../nextcloud/database.env
     restart: unless-stopped
     volumes:
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/custom_apps:/var/www/html/custom_apps"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/config:/var/www/html/config"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/data:/var/www/html/data"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/custom_apps:/var/www/html/custom_apps:z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/config:/var/www/html/config:z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/data:/var/www/html/data:z"
       - "nextcloud-html:/var/www/html"
     networks:
       - nginx-proxy
@@ -48,9 +48,9 @@ services:
     image: nextcloud:30.0
     restart: unless-stopped
     volumes:
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/custom_apps:/var/www/html/custom_apps"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/config:/var/www/html/config"
-      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/data:/var/www/html/data"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/custom_apps:/var/www/html/custom_apps:z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/config:/var/www/html/config:z"
+      - "${DOCKER_DATA_BASEDIR:-/srv/docker}/nextcloud/data:/var/www/html/data:z"
       - "nextcloud-html:/var/www/html"
     entrypoint: /cron.sh
     depends_on:
